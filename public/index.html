@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sharda Library | Reading Room Management</title>
+  <link rel="icon" type="image/jpeg" href="sharda-library-logo.jpg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <img class="brand-logo" src="sharda-library-logo.jpg" alt="Sharda Library — Read, Learn, Grow">
+    </div>
+    <nav>
+      <!-- Public Nav (Visible to all visitors) -->
+      <div class="nav-group public-nav-group">
+        <button class="nav-link active" data-page="public"><span>⌂</span> Public Home</button>
+      </div>
+
+      <!-- Admin Nav (Only visible after admin login) -->
+      <div class="nav-group admin-nav-group" style="display:none">
+        <div class="nav-section-label">ADMIN CONSOLE</div>
+        <button class="nav-link" data-page="dashboard"><span>⌂</span> Dashboard</button>
+        <button class="nav-link" data-page="bookings"><span>✦</span> Booking Requests <span class="nav-count" id="bookingPendingNavCount">0</span></button>
+        <button class="nav-link" data-page="students"><span>♙</span> Student Registration</button>
+        <button class="nav-link" data-page="seats"><span>▣</span> Seat Allocation</button>
+        <button class="nav-link" data-page="fees"><span>₹</span> Fees Management</button>
+        <button class="nav-link" data-page="membership-expiry"><span>◷</span> Membership Expiry</button>
+        <button class="nav-link" data-page="records"><span>▤</span> Student Records</button>
+        <button class="nav-link" data-page="halftime"><span>◷</span> Half-Time Students</button>
+        <button class="nav-link" data-page="settings"><span>⚙</span> Settings</button>
+        <hr class="nav-divider">
+        <button class="nav-link" data-page="public"><span>🌐</span> View Public Site</button>
+        <button class="nav-link nav-logout" id="sidebarLogoutBtn"><span>🚪</span> Log Out</button>
+      </div>
+    </nav>
+    <div class="sidebar-bottom">
+      <span class="online-dot" id="authStatusDot"></span>
+      <span id="authStatusText">Visitor Mode</span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+      <img class="topbar-logo" src="sharda-library-logo.jpg" alt="Sharda Library logo">
+      <div>
+        <h2 id="topbarTitle">Sharda Library</h2>
+        <p id="topbarSubtitle">Reading Room &amp; Study Sanctuary</p>
+      </div>
+      <div class="top-actions">
+        <span class="date-pill" id="todayDate"></span>
+        <div class="admin-chip" id="topbarAdminChip" style="display:none">
+          <span class="avatar">A</span>
+          <span>Admin</span>
+        </div>
+        <button class="btn-primary" id="topbarLoginBtn" data-go="login">Admin Login 🔒</button>
+        <button class="btn-light" id="topbarLogoutBtn" style="display:none">Logout 🚪</button>
+      </div>
+    </header>
+
+    <!-- 1. PUBLIC FRONT DASHBOARD (Visible to All) -->
+    <section class="page active" id="page-public">
+      
+      <!-- HERO SECTION -->
+      <div class="public-hero">
+        <div class="hero-mesh-orb orb-1"></div>
+        <div class="hero-mesh-orb orb-2"></div>
+        <div class="public-hero-content">
+          <div class="public-badge">
+            <span class="pulse-dot"></span>
+            <span>Premier Air-Conditioned Study Sanctuary</span>
+          </div>
+          <h2 id="publicHeroTitle">Sharda Library &amp; Reading Room</h2>
+          <p class="public-hero-tagline">
+            Empower your focus. <span class="gradient-text">Crack your dream exam.</span>
+          </p>
+          <p class="public-hero-subtitle">
+            A zero-distraction, pin-drop silent environment built for serious aspirants of UPSC, NEET, JEE, CA, SSC, Banking, and academic excellence.
+          </p>
+          
+          <div class="public-hero-stats booking-benefits">
+            <div class="public-stat-box primary"><div class="stat-icon-wrap">✦</div><div><span class="stat-num">Easy</span><span class="stat-lbl">Online Booking Request</span></div></div>
+            <div class="public-stat-box"><div class="stat-icon-wrap">🔒</div><div><span class="stat-num">Private</span><span class="stat-lbl">Seat Details Protected</span></div></div>
+            <div class="public-stat-box"><div class="stat-icon-wrap">✓</div><div><span class="stat-num">Admin</span><span class="stat-lbl">Verified Allocation</span></div></div>
+            <div class="public-stat-box"><div class="stat-icon-wrap">⌁</div><div><span class="stat-num">Track</span><span class="stat-lbl">Request Status Online</span></div></div>
+          </div>
+
+          <div class="public-hero-actions">
+            <a href="#bookingSection" class="btn-hero-primary" id="publicBookSeatBtn">
+              <span>✦</span> Book Your Seat
+            </a>
+            <a href="https://wa.me/919876543210" class="btn-whatsapp" id="publicWhatsAppInquiryBtn" target="_blank" rel="noopener">
+              <span>💬</span> Inquire on WhatsApp
+            </a>
+          </div>
+        </div>
+
+        <div class="public-hero-card">
+          <div class="hero-card-header">
+            <div class="hero-card-icon-wrap">🕒</div>
+            <div>
+              <strong>Daily Shift Timings</strong>
+              <small>Open All 7 Days a Week</small>
+            </div>
+          </div>
+          <div class="shift-cards">
+            <div class="shift-mini-card">
+              <div class="shift-time-head">
+                <span class="shift-dot morning"></span>
+                <b>Morning Shift</b>
+              </div>
+              <span class="shift-hours">06:00 AM – 02:00 PM</span>
+              <small>Fresh early morning study block</small>
+            </div>
+            <div class="shift-mini-card">
+              <div class="shift-time-head">
+                <span class="shift-dot evening"></span>
+                <b>Evening Shift</b>
+              </div>
+              <span class="shift-hours">02:00 PM – 10:00 PM</span>
+              <small>Quiet post-college / work hours</small>
+            </div>
+            <div class="shift-mini-card featured">
+              <div class="shift-time-head">
+                <span class="shift-dot fullday"></span>
+                <b>Full-Day Reserved</b>
+                <span class="badge-mini">Recommended</span>
+              </div>
+              <span class="shift-hours">06:00 AM – 11:00 PM</span>
+              <small>17-hr all-day uninterrupted desk</small>
+            </div>
+          </div>
+
+          <div class="booking-assurance-box">
+            <span class="assurance-icon">🔐</span>
+            <div><strong>Your seat details stay private</strong><small>Submit a request and our admin team will confirm your allocation.</small></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRIVATE ONLINE BOOKING REQUEST -->
+      <section class="booking-area" id="bookingSection">
+        <div class="public-section-header">
+          <div class="section-pill">New Student Registration</div>
+          <h3>Request Your Study Space</h3>
+          <p>Share your details with us. Your request will be reviewed by the library administrator before any seat is allocated.</p>
+        </div>
+        <div class="booking-layout">
+          <div class="booking-form-card">
+            <div class="booking-card-heading"><span class="booking-heading-icon">✦</span><div><h4>Seat Booking Request</h4><p>All fields marked * are required.</p></div></div>
+            <form id="publicBookingForm">
+              <div class="form-grid booking-form-grid">
+                <label>Full Name *<input id="bookingName" required maxlength="80" autocomplete="name" placeholder="Enter your full name"></label>
+                <label>Mobile Number *<input id="bookingPhone" required inputmode="numeric" maxlength="10" pattern="[0-9]{10}" autocomplete="tel" placeholder="10-digit mobile number"></label>
+                <label>Email Address <span class="optional-label">Optional</span><input id="bookingEmail" type="email" maxlength="120" autocomplete="email" placeholder="you@example.com"></label>
+                <label>Course / Exam <span class="optional-label">Optional</span><input id="bookingCourse" maxlength="80" placeholder="e.g. SSC, NEET, B.Com"></label>
+                <label>Membership Plan *<select id="bookingPlan" required><option value="">Choose a plan</option><option value="Full-Day">Full-Day Membership</option><option value="Half-Day">Half-Day Membership</option></select></label>
+                <label>Preferred Shift *<select id="bookingShift" required><option value="">Choose a shift</option><option>Morning (6 AM – 2 PM)</option><option>Evening (2 PM – 10 PM)</option><option>Full Day (6 AM – 11 PM)</option></select></label>
+                <label>Expected Joining Date *<input id="bookingJoining" type="date" required></label>
+              </div>
+              <label class="booking-message-label">Additional Message <span class="optional-label">Optional</span><textarea id="bookingMessage" rows="3" maxlength="500" placeholder="Any question or detail you would like us to know..."></textarea></label>
+              <div class="booking-form-footer"><p><span>🔒</span> Your details are shared only with the library administrator.</p><button class="btn-plan primary" type="submit">Submit Booking Request <span>→</span></button></div>
+            </form>
+            <div class="booking-success" id="bookingSuccess" hidden aria-live="polite"></div>
+          </div>
+          <aside class="booking-side-card">
+            <div class="booking-side-icon">📖</div><h4>What happens next?</h4>
+            <ol class="booking-steps"><li><b>Submit your details</b><span>Your request is recorded with a unique Booking ID.</span></li><li><b>Admin review</b><span>Our administrator checks your request and confirms the plan.</span></li><li><b>Seat allocation</b><span>A seat is assigned only after admin approval.</span></li><li><b>Get confirmation</b><span>Check your request status here using your Booking ID and mobile number.</span></li></ol>
+            <div class="booking-privacy-note"><span>🛡️</span><span>Live seat availability and other students' allocation details are never shown publicly.</span></div>
+          </aside>
+        </div>
+        <div class="booking-status-card" id="bookingStatusSection">
+          <div><div class="section-pill">Already Requested?</div><h4>Track Your Booking</h4><p>Enter the Booking ID received after submitting your request and your registered mobile number.</p></div>
+          <form id="bookingStatusForm" class="booking-status-form"><label>Booking ID<input id="statusBookingId" required placeholder="SHL-REQ-2026-0001"></label><label>Mobile Number<input id="statusBookingPhone" required inputmode="numeric" maxlength="10" pattern="[0-9]{10}" placeholder="Registered mobile number"></label><button class="btn-primary" type="submit">Check Status</button></form>
+          <div id="bookingStatusResult" class="booking-status-result" hidden aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- FACILITIES & AMENITIES SHOWCASE -->
+      <div class="public-section-header">
+        <div class="section-pill">Built for Aspirants</div>
+        <h3>Everything You Need for 10+ Hour Study Sessions</h3>
+        <p>Thoughtfully engineered reading environment with top-grade infrastructure.</p>
+      </div>
+      <div class="amenities-grid-aesthetic">
+        <article class="amenity-card-aesthetic">
+          <div class="amenity-icon-aesthetic ic-blue">❄️</div>
+          <h4>Inverter Air Conditioning</h4>
+          <p>Maintained at a comfortable 23°C to eliminate mental fatigue, humidity, and heat during long hours.</p>
+        </article>
+        <article class="amenity-card-aesthetic">
+          <div class="amenity-icon-aesthetic ic-teal">⚡</div>
+          <h4>Dedicated Power Sockets</h4>
+          <p>Individual 3-pin universal power sockets and USB charging ports at each personal desk for laptops and tablets.</p>
+        </article>
+        <article class="amenity-card-aesthetic">
+          <div class="amenity-icon-aesthetic ic-indigo">📶</div>
+          <h4>Dual 300 Mbps Fiber Wi-Fi</h4>
+          <p>Ultra-low ping dual ISP lines with automatic failover so your online tests and video lectures never lag.</p>
+        </article>
+        <article class="amenity-card-aesthetic">
+          <div class="amenity-icon-aesthetic ic-amber">💺</div>
+          <h4>Ergonomic Orthopedic Chairs</h4>
+          <p>High-density memory foam seat cushions and breathable lumbar mesh backrests for strain-free posture.</p>
+        </article>
+        <article class="amenity-card-aesthetic">
+          <div class="amenity-icon-aesthetic ic-purple">🔇</div>
+          <h4>Pin-Drop Silent Architecture</h4>
+          <p>Acoustic dampening carpeting and strictly enforced silent zones ensuring zero whispers or distractions.</p>
+        </article>
+        <article class="amenity-card-aesthetic">
+          <div class="amenity-icon-aesthetic ic-green">🚰</div>
+          <h4>RO Water &amp; Pantry Station</h4>
+          <p>Multi-stage RO purified chilled, normal, and warm water dispensers plus clean breakout space.</p>
+        </article>
+        <article class="amenity-card-aesthetic">
+          <div class="amenity-icon-aesthetic ic-rose">🛡️</div>
+          <h4>24/7 CCTV &amp; Secure Access</h4>
+          <p>Continuous HD camera monitoring, well-lit entrance, and safety for female students attending early/late shifts.</p>
+        </article>
+        <article class="amenity-card-aesthetic">
+          <div class="amenity-icon-aesthetic ic-gold">💡</div>
+          <h4>Eye-Care Natural Lighting</h4>
+          <p>Flicker-free, 4000K warm-white LED desk lamps tailored to prevent eye strain and headaches.</p>
+        </article>
+      </div>
+
+      <!-- PRICING & STUDY PLANS -->
+      <div class="public-section-header" style="margin-top:36px">
+        <div class="section-pill">Simple &amp; Transparent</div>
+        <h3>Flexible Membership Plans</h3>
+        <p>No admission fees or hidden security deposits. Pay month-to-month.</p>
+      </div>
+      <div class="pricing-grid-aesthetic">
+        <div class="pricing-card-aesthetic">
+          <div class="pricing-badge">Shift Based</div>
+          <h4>Half-Day Shift Pass</h4>
+          <div class="pricing-amount">₹500 <span>/ month</span></div>
+          <p class="pricing-desc">Choose either Morning Shift (6 AM - 2 PM) or Evening Shift (2 PM - 10 PM).</p>
+          <ul class="pricing-features">
+            <li><span class="chk">✓</span> Fixed desk during your shift</li>
+            <li><span class="chk">✓</span> Unlimited High-Speed Wi-Fi</li>
+            <li><span class="chk">✓</span> Personal charging socket</li>
+            <li><span class="chk">✓</span> Purified RO drinking water</li>
+          </ul>
+          <a href="#bookingSection" class="btn-plan" data-booking-link>Book Shift Pass</a>
+        </div>
+
+        <div class="pricing-card-aesthetic popular">
+          <div class="popular-ribbon">⭐ Most Popular</div>
+          <div class="pricing-badge primary">All-Day Unlimited</div>
+          <h4>Full-Day Dedicated Desk</h4>
+          <div class="pricing-amount">₹800 <span>/ month</span></div>
+          <p class="pricing-desc">Your permanent personal study desk reserved exclusively for you 6:00 AM – 11:00 PM daily.</p>
+          <ul class="pricing-features">
+            <li><span class="chk">✓</span> <b>Dedicated personal desk number</b></li>
+            <li><span class="chk">✓</span> Full 17-hour access (6 AM – 11 PM)</li>
+            <li><span class="chk">✓</span> Leave books &amp; study notes on your desk</li>
+            <li><span class="chk">✓</span> Priority renewal reservation</li>
+            <li><span class="chk">✓</span> Free high-speed Wi-Fi &amp; power sockets</li>
+          </ul>
+          <a href="#bookingSection" class="btn-plan" data-booking-link>Reserve Full-Day Desk</a>
+        </div>
+
+        <div class="pricing-card-aesthetic">
+          <div class="pricing-badge">Flexible</div>
+          <h4>Drop-In / Hourly Pass</h4>
+          <div class="pricing-amount">Pay <span>per visit</span></div>
+          <p class="pricing-desc">Ideal for students needing a focused quiet spot for mock exams or occasional revision.</p>
+          <ul class="pricing-features">
+            <li><span class="chk">✓</span> Drop-in desk assignment</li>
+            <li><span class="chk">✓</span> Exact time check-in &amp; check-out</li>
+            <li><span class="chk">✓</span> Wi-Fi &amp; power sockets access</li>
+            <li><span class="chk">✓</span> Pay on departure via UPI / Cash</li>
+          </ul>
+          <a href="https://wa.me/919876543210?text=Hello%20Sharda%20Library%2C%20I%20want%20to%20inquire%20about%20Drop-In%20visits." class="btn-plan" target="_blank" rel="noopener">Inquire Drop-In</a>
+        </div>
+      </div>
+
+      <!-- TESTIMONIALS / STUDENT REVIEWS -->
+      <div class="public-section-header" style="margin-top:36px">
+        <div class="section-pill">Proven Results</div>
+        <h3>Loved by Serious Aspirants</h3>
+        <p>Here is what students preparing for competitive exams say about Sharda Library.</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote">"Secured Rank 42 in SSC CGL. Sharda Library gave me the distraction-free environment and discipline I simply couldn't find at home. Truly grateful!"</p>
+          <div class="testimonial-author">
+            <span class="author-avatar">R</span>
+            <div>
+              <strong>Rahul Sharma</strong>
+              <small>Selected, SSC CGL 2026</small>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote">"The orthopedic chairs and personal LED desk lamps are game changers. I could study 11 hours straight without neck strain during my CA Finals prep."</p>
+          <div class="testimonial-author">
+            <span class="author-avatar">P</span>
+            <div>
+              <strong>Pooja Verma</strong>
+              <small>CA Finalist</small>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-quote">"The high-speed Wi-Fi and pin-drop silence made mock tests seamless. Best reading room in the area with disciplined staff and clean atmosphere."</p>
+          <div class="testimonial-author">
+            <span class="author-avatar">A</span>
+            <div>
+              <strong>Ankit Choudhary</strong>
+              <small>NEET-UG Aspirant</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ ACCORDION -->
+      <div class="public-section-header" style="margin-top:36px">
+        <div class="section-pill">Got Questions?</div>
+        <h3>Frequently Asked Questions</h3>
+        <p>Quick answers about membership, desk reservations, and library facilities.</p>
+      </div>
+      <div class="faq-container">
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Can I visit and take a free 1-hour trial before registering?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes, absolutely! You are welcome to visit our reading hall during operational hours (6:00 AM – 11:00 PM) for a free demo session to experience the silence, seating comfort, and Wi-Fi speed.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>Is my desk permanently reserved in the monthly full-day plan?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Yes! When you register for a dedicated full-day seat, that specific desk number is permanently assigned to you. No other student is permitted to sit at your desk, and you can leave your books and notebooks safely.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>What are the rules regarding phone calls and discussions?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Sharda Library maintains a strict zero-tolerance pin-drop silence policy. All mobile phones must be kept on silent mode. Calls must be attended outside the study hall in the designated lobby area.</p>
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">
+            <span>How do I renew my monthly membership fees?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>You can renew directly via any UPI app (Google Pay, PhonePe, Paytm, BHIM) to the official library UPI ID: <code>teenachoudhary186@ybl</code>, or pay cash at the front reception desk. WhatsApp renewal alerts are automatically sent prior to the renewal date.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTTOM CALL TO ACTION -->
+      <div class="public-cta-banner" style="margin-top:36px">
+        <div class="cta-banner-content">
+          <h3>Ready to Experience Focused Study?</h3>
+          <p>Submit an online booking request. Our administrator will review it and confirm your seat allocation.</p>
+          <div class="cta-actions">
+            <a href="https://wa.me/919876543210?text=Hello%20Sharda%20Library%2C%20I%20would%20like%20to%20reserve%20a%20seat." class="btn-whatsapp" target="_blank" rel="noopener">
+              <span>💬</span> Message on WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 2. UNIQUE ADMIN-ONLY LOGIN PAGE -->
+    <section class="page" id="page-login">
+      <div class="login-container">
+        <div class="login-card">
+          <div class="login-header">
+            <div class="login-icon">🔒</div>
+            <h2>Admin Portal</h2>
+            <p>Library Staff &amp; Administrator Authentication</p>
+          </div>
+          <div class="login-error-alert" id="loginErrorAlert" hidden>
+            Invalid username or password. Please try again.
+          </div>
+          <form id="adminLoginForm">
+            <div class="form-grid" style="grid-template-columns:1fr;gap:16px">
+              <label>Fixed Admin ID
+                <input id="loginUsername" required autocomplete="username" placeholder="Enter fixed Admin ID">
+              </label>
+              <label>Password
+                <div class="password-field">
+                  <input id="loginPassword" type="password" required autocomplete="current-password" placeholder="Enter password">
+                  <button type="button" class="toggle-password-btn" id="togglePasswordBtn" aria-label="Toggle password visibility">👁️</button>
+                </div>
+              </label>
+            </div>
+            <div class="login-actions" style="margin-top:20px">
+              <button class="btn-primary login-btn" type="submit">Sign In to Admin Workspace</button>
+            </div>
+          </form>
+          <div class="login-credentials-hint">
+            <small style="display:block;color:var(--muted)">Use the fixed Admin ID and password configured for this installation. Password recovery is verified with an OTP sent to the registered admin email.</small>
+          </div>
+          <div class="login-back">
+            <button class="text-btn" type="button" id="showForgotPasswordBtn">Forgot Password?</button>
+            <button class="text-btn" data-go="public">← Return to Public Dashboard</button>
+          </div>
+          <div id="forgotPasswordPanel" class="auth-extra-panel" hidden>
+            <h3>Reset Admin Password</h3>
+            <form id="forgotSendOtpForm">
+              <label><span id="forgotContactLabel">Registered Admin Email</span><input id="forgotMobile" type="email" maxlength="254" required placeholder="Registered admin email" autocomplete="email"></label>
+              <button class="btn-primary" type="submit">Send OTP</button>
+            </form>
+            <form id="forgotVerifyOtpForm" hidden>
+              <label>6-digit OTP<input id="forgotOtp" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" required placeholder="Enter OTP" autocomplete="one-time-code"></label>
+              <button class="btn-primary" type="submit">Verify OTP</button>
+              <div class="form-actions"><button class="text-btn" type="button" id="forgotResendBtn">Resend OTP</button><button class="text-btn" type="button" id="forgotChangeNumberBtn">Change email</button></div>
+            </form>
+            <form id="forgotResetForm" hidden>
+              <label>New Password<input id="forgotNewPassword" type="password" minlength="12" required autocomplete="new-password"></label>
+              <label>Confirm New Password<input id="forgotConfirmPassword" type="password" minlength="12" required autocomplete="new-password"></label>
+              <button class="btn-primary" type="submit">Update Password</button>
+            </form>
+            <p id="forgotPasswordMessage" class="muted" aria-live="polite"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="page-dashboard">
+      <div class="welcome-banner">
+        <div class="book-emoji">📚</div>
+        <div><h2>Welcome to Sharda Library!</h2><p>A peaceful place to focus, learn and grow.</p></div>
+        <div class="banner-mark">SHARDA<br><small>READING ROOM</small></div>
+      </div>
+      <div class="stats-grid history-stats">
+        <article class="stat-card blue"><div class="stat-icon">♙</div><div><strong id="totalStudents">0</strong><span>Lifetime Students</span></div></article>
+        <article class="stat-card teal"><div class="stat-icon">✓</div><div><strong id="activeStudents">0</strong><span>Active Students</span></div></article>
+        <article class="stat-card gold"><div class="stat-icon">▤</div><div><strong id="formerStudents">0</strong><span>Completed / Left</span></div></article>
+        <article class="stat-card teal"><div class="stat-icon">▣</div><div><strong id="occupiedSeats">0</strong><span>Occupied Seats</span></div></article>
+        <article class="stat-card pale"><div class="stat-icon">▢</div><div><strong id="availableSeats">100</strong><span>Available Seats</span></div></article>
+        <article class="stat-card gold"><div class="stat-icon">₹</div><div><strong id="pendingFees">0</strong><span>Pending Fees</span></div></article>
+      </div>
+      <div class="overview-grid">
+        <article class="panel">
+          <div class="panel-heading"><div><span class="heading-icon">▥</span><h3>Seat Overview</h3></div><button class="text-btn" data-go="seats">Manage seats →</button></div>
+          <div class="seat-overview">
+            <div class="donut-wrap"><div class="donut" id="seatDonut"><div><b id="seatPercent">0%</b><span>Occupied</span></div></div></div>
+            <div class="legend">
+              <p><i class="dot dot-blue"></i> Occupied seats <b id="seatLegendOccupied">0</b></p>
+              <p><i class="dot dot-grey"></i> Available seats <b id="seatLegendAvailable">100</b></p>
+              <hr><p class="legend-total">Total capacity <b>100</b></p>
+            </div>
+          </div>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><div><span class="heading-icon">₹</span><h3>Fees Overview</h3></div><button class="text-btn" data-go="fees">View fees →</button></div>
+          <div class="fee-summary">
+            <div class="fee-big"><strong id="feeCollected">₹0</strong><span>Collected this month</span></div>
+            <div class="fee-numbers"><p><span class="dot dot-green"></span> Paid students <b id="paidCount">0</b></p><p><span class="dot dot-orange"></span> Pending students <b id="pendingCount">0</b></p></div>
+          </div>
+        </article>
+      </div>
+      <div class="bottom-grid">
+        <article class="panel">
+          <div class="panel-heading"><div><span class="heading-icon">✦</span><h3>Quick Actions</h3></div></div>
+          <div class="quick-actions">
+            <button data-go="bookings"><span>✦</span>Booking Requests</button>
+            <button data-go="students"><span>＋</span>Add Student</button>
+            <button data-go="seats"><span>▣</span>Allocate Seat</button>
+            <button data-go="fees"><span>₹</span>Manage Fees</button>
+            <button data-go="settings"><span>⚙</span>Settings</button>
+          </div>
+        </article>
+        <article class="goal-card"><div class="goal-icon">✦</div><h3>Our Goal</h3><p>A comfortable and focused reading environment for every student.</p><div class="goal-book">📖</div></article>
+      </div>
+    </section>
+
+    <section class="page" id="page-membership-expiry">
+      <div class="page-title"><div><h2>Membership Expiry</h2><p>Monitor upcoming renewals and overdue memberships. Select a category to view its students.</p></div></div>
+      <section class="expiry-section" aria-labelledby="expiryHeading">
+        <div class="expiry-section-heading"><div><h3 id="expiryHeading">Expiry Overview</h3><p>Choose a category below to open its student list.</p></div></div>
+        <div class="expiry-grid">
+          <button class="expiry-card overdue" type="button" data-expiry-category="overdue"><span class="expiry-card-icon">!</span><span class="expiry-card-count" id="expiryOverdueCount">0</span><span class="expiry-card-label">Overdue</span><span class="expiry-card-hint">Expired, not yet ended</span></button>
+          <button class="expiry-card today" type="button" data-expiry-category="today"><span class="expiry-card-icon">◷</span><span class="expiry-card-count" id="expiryTodayCount">0</span><span class="expiry-card-label">Expires Today</span><span class="expiry-card-hint">Due date is today</span></button>
+          <button class="expiry-card tomorrow" type="button" data-expiry-category="tomorrow"><span class="expiry-card-icon">◷</span><span class="expiry-card-count" id="expiryTomorrowCount">0</span><span class="expiry-card-label">Expires Tomorrow</span><span class="expiry-card-hint">Due date is tomorrow</span></button>
+          <button class="expiry-card next-five" type="button" data-expiry-category="next5"><span class="expiry-card-icon">▦</span><span class="expiry-card-count" id="expiryNext5Count">0</span><span class="expiry-card-label">Next 5 Days</span><span class="expiry-card-hint">After tomorrow, within 5 days</span></button>
+        </div>
+      </section>
+    </section>
+
+    <section class="page" id="page-bookings">
+      <div class="page-title"><div><h2>Booking Requests</h2><p>Review new student requests. No seat is reserved until you approve and allocate it.</p></div></div>
+      <div class="stats-grid booking-admin-stats">
+        <article class="stat-card gold"><div class="stat-icon">◷</div><div><strong id="bookingPendingCount">0</strong><span>Pending Requests</span></div></article>
+        <article class="stat-card teal"><div class="stat-icon">✓</div><div><strong id="bookingApprovedCount">0</strong><span>Approved</span></div></article>
+        <article class="stat-card blue"><div class="stat-icon">×</div><div><strong id="bookingRejectedCount">0</strong><span>Rejected</span></div></article>
+      </div>
+      <div class="panel">
+        <div class="panel-heading records-toolbar"><h3>All Booking Requests</h3><div class="records-filters"><select class="table-search record-type-filter" id="bookingFilter"><option value="all">All Requests</option><option value="Pending">Pending</option><option value="Approved">Approved</option><option value="Rejected">Rejected</option></select><input class="table-search" id="bookingSearch" placeholder="Search name, ID or mobile..."></div></div>
+        <div class="table-wrap"><table><thead><tr><th>Booking ID</th><th>Student</th><th>Contact</th><th>Plan / Shift</th><th>Joining Date</th><th>Status</th><th>Seat</th><th>Actions</th></tr></thead><tbody id="bookingRequestsTable"></tbody></table></div>
+      </div>
+      <p class="form-note">Approving a request creates a student record and allocates the seat you select. Monthly fee is entered by the administrator during approval.</p>
+    </section>
+
+    <section class="page" id="page-students">
+      <div class="page-title"><div><h2>Student Registration</h2><p>Add a student and assign their library details.</p></div></div>
+      <div class="panel form-panel">
+        <h3 class="form-heading">Student Details</h3>
+        <form id="studentForm">
+          <input type="hidden" id="studentId">
+          <div class="registration-layout">
+            <div class="student-fields">
+              <div class="form-grid">
+                <label>Full Name *<input id="studentName" required placeholder="Enter student name"></label>
+                <label>Mobile Number *<input id="studentPhone" required inputmode="numeric" maxlength="10" pattern="[0-9]{10}" placeholder="10-digit mobile number"></label>
+                <label>Library Student ID *<input id="studentRoll" required readonly placeholder="Generated automatically"></label>
+                <label>Course / Class<input id="studentCourse" placeholder="e.g. B.Com / SSC / NEET"></label>
+                <label>Joining Date *<div class="date-field"><input id="joiningDateDisplay" type="text" placeholder="Nov 03, 2026" readonly required><button type="button" class="date-picker-btn" id="joiningDateBtn" aria-label="Choose joining date">▦</button><input id="joiningDate" type="date" class="native-date-hidden" required></div></label>
+                <label>Monthly Fee (₹) *<input id="monthlyFee" type="number" min="0" required placeholder="e.g. 800"></label>
+                <label>Seat Number<select id="studentSeat"><option value="">Choose a seat</option></select></label>
+                <label>Initial Fee Status<select id="initialFeeStatus"><option value="Pending">Pending</option><option value="Paid">Paid</option></select></label>
+              </div>
+            </div>
+            <aside class="photo-panel">
+              <h3>📷 Student Photo</h3>
+              <input type="file" id="studentPhoto" accept="image/jpeg,image/png,image/webp" hidden>
+              <label class="photo-upload" for="studentPhoto" id="photoUploadLabel">
+                <span class="upload-icon">⇧</span><strong>Upload Photo</strong>
+                <small>Click to choose JPG, PNG or WebP</small><small>Maximum file size: 2 MB</small>
+              </label>
+              <div class="photo-preview-wrap" id="photoPreviewWrap" hidden>
+                <img id="photoPreview" alt="Student photo preview">
+                <button type="button" class="remove-photo-btn" id="removePhotoBtn">Remove Photo</button>
+              </div>
+              <p class="photo-help">Photo is optional and will appear with the student's record.</p>
+            </aside>
+          </div>
+          <div class="form-actions"><button class="btn-primary" type="submit" id="studentSubmit">Save Student</button><button class="btn-light" type="reset" id="studentCancel">Clear</button></div>
+          <p class="form-note">* Required fields. A seat can be assigned now or later from Seat Allocation. Student photo is optional.</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="page" id="page-seats">
+      <div class="page-title"><div><h2>Seat Allocation</h2><p>Manage the fixed seating capacity of 100 students.</p></div><div class="capacity-pill">Capacity: <b>100 seats</b></div></div>
+      <div class="seat-toolbar"><div class="seat-key"><span><i class="seat-swatch occupied"></i> Occupied</span><span><i class="seat-swatch vacant"></i> Available</span></div><input id="seatSearch" placeholder="Search seat or student..."></div>
+      <div class="seat-grid" id="seatGrid"></div>
+    </section>
+
+    <section class="page" id="page-fees">
+      <div class="page-title"><div><h2>Fees Management</h2><p>Track monthly payments, renewal dates and WhatsApp reminders.</p></div></div>
+      <div class="stats-grid compact">
+        <article class="stat-card blue"><div class="stat-icon">₹</div><div><strong id="feesTotalCollected">₹0</strong><span>Collected this month</span></div></article>
+        <article class="stat-card gold"><div class="stat-icon">!</div><div><strong id="feesPendingCount">0</strong><span>Pending payments</span></div></article>
+      </div>
+      <div class="panel">
+        <div class="panel-heading"><div><h3>Monthly Fee Records</h3></div><input class="table-search" id="feeSearch" placeholder="Search student..."></div>
+        <div class="table-wrap"><table><thead><tr><th>Student</th><th>Seat</th><th>Monthly Fee</th><th>Due Date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="feesTable"></tbody></table></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-records">
+      <div class="page-title"><div><h2>Student Records</h2><p>All students remain in this history, including completed memberships.</p></div><button class="btn-primary" data-go="students">＋ Add Student</button></div>
+      <div class="panel">
+        <div class="panel-heading records-toolbar"><h3>Lifetime Student History</h3><div class="records-filters"><select class="table-search record-type-filter" id="recordTypeFilter" aria-label="Filter student type"><option value="all">All Students</option><option value="active">Active Students</option><option value="former">Former Students</option></select><input class="table-search" id="recordSearch" placeholder="Search name, ID or seat..."></div></div>
+        <div class="table-wrap"><table><thead><tr><th>Photo</th><th>Student</th><th>Student ID</th><th>Mobile</th><th>Course</th><th>Seat</th><th>Membership</th><th>Fee Status</th><th>Actions</th></tr></thead><tbody id="recordsTable"></tbody></table></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-halftime">
+      <div class="page-title"><div><h2>Half-Time Students</h2><p>Manage temporary desk visits separately from regular student records.</p></div><button class="btn-primary" id="exportHalfBtn">↓ Export Visits CSV</button></div>
+      <div class="panel form-panel">
+        <h3 class="form-heading">Add Half-Time Visit</h3>
+        <form id="halfTimeForm">
+          <div class="form-grid">
+            <label>Full Name *<input id="halfName" required placeholder="Enter student name"></label>
+            <label>Mobile Number *<input id="halfPhone" required inputmode="numeric" maxlength="10" pattern="[0-9]{10}" placeholder="10-digit mobile number"></label>
+            <label>Visit Date *<input id="halfDate" type="date" required></label>
+            <label>Temporary Seat Number *<select id="halfSeat" required><option value="">Choose a seat</option></select></label>
+            <label>Entry Time *<input id="halfEntry" type="time" required></label>
+            <label>Fee Amount (₹) *<input id="halfFee" type="number" min="0" step="1" required placeholder="Enter visit fee"></label>
+            <label>Payment Status<select id="halfPayment"><option>Pending</option><option>Paid</option></select></label>
+          </div>
+          <div class="form-actions"><button class="btn-primary" type="submit">Save Half-Time Visit</button><button class="btn-light" type="reset">Clear</button></div>
+          <p class="form-note">A regular student's permanently assigned seat can be used only after you confirm that the student is temporarily away and the desk is vacant. Regular seat ownership will not change.</p>
+        </form>
+      </div>
+      <div class="panel" style="margin-top:18px">
+        <div class="panel-heading"><div><h3>Half-Time Visit History</h3></div><input class="table-search" id="halfSearch" placeholder="Search name, mobile or seat..."></div>
+        <div class="table-wrap"><table><thead><tr><th>Student</th><th>Mobile</th><th>Date</th><th>Seat</th><th>Entry</th><th>Exit</th><th>Duration</th><th>Fee</th><th>Payment</th><th>Actions</th></tr></thead><tbody id="halfTable"></tbody></table></div>
+      </div>
+    </section>
+
+    <section class="page" id="page-settings">
+      <div class="page-title">
+        <div>
+          <h2>Settings</h2>
+          <p>Manage admin security, library configuration, activity logs, reports and data backups.</p>
+        </div>
+        <div class="reports-header-actions">
+          <button class="btn-primary" id="exportBtn">↓ Export CSV</button>
+          <button class="btn-light" id="backupJsonBtn">⤓ Backup JSON</button>
+          <button class="btn-light" id="restoreJsonBtn">⤒ Restore JSON</button>
+          <input type="file" id="restoreFileInput" accept=".json,application/json" hidden>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <article class="stat-card blue"><div class="stat-icon">♙</div><div><strong id="reportStudents">0</strong><span>Total Students</span></div></article>
+        <article class="stat-card teal"><div class="stat-icon">▣</div><div><strong id="reportOccupied">0</strong><span>Occupied Seats</span></div></article>
+        <article class="stat-card pale"><div class="stat-icon">▢</div><div><strong id="reportVacant">100</strong><span>Available Seats</span></div></article>
+        <article class="stat-card gold"><div class="stat-icon">₹</div><div><strong id="reportPending">0</strong><span>Pending Fees</span></div></article>
+      </div>
+      <div class="overview-grid" style="margin-top:18px">
+        <article class="panel report-panel">
+          <div class="panel-heading"><div><span class="heading-icon">▥</span><h3>Library Summary</h3></div></div>
+          <p id="reportSummary">No students have been registered yet.</p>
+          <div class="storage-info-box">
+            <span class="online-dot"></span> <span id="storageUsageText">0 KB used in browser LocalStorage</span>
+          </div>
+          <p class="muted" style="margin-top:12px">Browser LocalStorage is only a local cache. Server backups run daily and before important changes; you can also create and download a backup manually.</p>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><div><span class="heading-icon">🔐</span><h3>Admin Security</h3></div></div>
+          <p class="muted">Admin ID is fixed. A one-time OTP will be sent to the registered admin email. You must verify it before setting a new password.</p>
+          <form id="changePasswordSendOtpForm" class="form-grid" style="grid-template-columns:1fr;gap:10px">
+            <button class="btn-primary" type="submit" id="changeSendOtpBtn">Send OTP to Registered Email</button>
+          </form>
+          <form id="changePasswordVerifyOtpForm" class="form-grid" style="grid-template-columns:1fr;gap:10px;margin-top:12px" hidden>
+            <label>6-digit OTP<input id="changePasswordOtp" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" required autocomplete="one-time-code"></label>
+            <div class="form-actions"><button class="btn-primary" type="submit">Verify OTP</button><button class="btn-light" id="changeResendBtn" type="button">Resend OTP</button><button class="btn-light" id="changeCancelBtn" type="button">Cancel</button></div>
+          </form>
+          <form id="changePasswordUpdateForm" class="form-grid" style="grid-template-columns:1fr;gap:10px;margin-top:12px" hidden>
+            <label>New Password<input id="changeNewPassword" type="password" minlength="12" required autocomplete="new-password"></label>
+            <label>Confirm New Password<input id="changeConfirmPassword" type="password" minlength="12" required autocomplete="new-password"></label>
+            <button class="btn-primary" type="submit">Update Admin Password</button>
+          </form>
+          <p id="changePasswordMessage" class="muted" aria-live="polite"></p>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><div><span class="heading-icon">⚙</span><h3>Library Settings</h3></div></div>
+          <form id="settingsForm">
+            <div class="form-grid" style="grid-template-columns:1fr;gap:12px">
+              <label>Library Name
+                <input id="settingsLibraryName" required placeholder="Sharda Library">
+              </label>
+              <label>UPI ID for WhatsApp Reminders
+                <input id="settingsUpiId" required placeholder="e.g. yourname@upi or mobile@bank">
+              </label>
+            </div>
+            <div class="form-actions" style="margin-top:14px">
+              <button class="btn-primary" type="submit">Save Settings</button>
+            </div>
+          </form>
+        </article>
+      </div>
+      <div class="overview-grid" style="margin-top:18px">
+        <article class="panel" id="serverToolsPanel">
+          <div class="panel-heading"><div><span class="heading-icon">🛡️</span><h3>Server Backups</h3></div><button class="btn-primary" id="createServerBackupBtn" type="button">＋ Backup Now</button></div>
+          <p class="muted">A backup is taken automatically every day and before important changes. The last 60 are kept on the server. Student photos are embedded in each backup.</p>
+          <p id="serverStatsLine" class="muted"></p>
+          <div class="table-wrap"><table><thead><tr><th>Backup</th><th>Time</th><th>Actions</th></tr></thead><tbody id="serverBackupsTable"><tr><td colspan="3" class="empty-row">Loading…</td></tr></tbody></table></div>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><div><span class="heading-icon">📜</span><h3>Activity Log</h3></div><button class="btn-light" id="refreshAuditBtn" type="button">↻ Refresh</button></div>
+          <p class="muted">Recent logins, saves, password changes, bookings, photos and backups.</p>
+          <div class="table-wrap"><table><thead><tr><th>Time</th><th>Event</th><th>Device (IP)</th></tr></thead><tbody id="auditTable"><tr><td colspan="3" class="empty-row">Loading…</td></tr></tbody></table></div>
+        </article>
+      </div>
+    </section>
+
+    <footer>© <span id="year"></span> <span id="footerLibraryName">Sharda Library</span> · Reading Room Management System</footer>
+  </main>
+
+  <div class="modal-backdrop" id="seatModal">
+    <div class="modal">
+      <button class="modal-close" id="closeSeatModal">×</button>
+      <h3 id="seatModalTitle">Seat details</h3>
+      <p id="seatModalText"></p>
+      <div class="modal-actions" id="seatModalActions"></div>
+    </div>
+  </div>
+  <div class="modal-backdrop expiry-modal-backdrop" id="expiryStudentsModal" role="dialog" aria-modal="true" aria-labelledby="expiryModalTitle">
+    <div class="modal expiry-modal">
+      <button class="modal-close" id="closeExpiryModal" aria-label="Close">×</button>
+      <h3 id="expiryModalTitle">Membership Expiry Students</h3>
+      <p id="expiryModalDescription">Students in this expiry category.</p>
+      <div class="table-wrap expiry-table-wrap"><table><thead><tr><th>Student</th><th>Student ID</th><th>Mobile</th><th>Seat</th><th>Expiry Date</th><th>Fee</th><th>Action</th></tr></thead><tbody id="expiryStudentsTable"></tbody></table></div>
+    </div>
+  </div>
+  <div class="modal-backdrop" id="publicSeatModal">
+    <div class="modal">
+      <button class="modal-close" id="closePublicSeatModal">×</button>
+      <h3 id="publicSeatModalTitle">Seat Details</h3>
+      <p id="publicSeatModalText"></p>
+      <div class="modal-actions" id="publicSeatModalActions"></div>
+    </div>
+  </div>
+
+  <!-- PRINTABLE OFFICIAL FEE RECEIPT MODAL -->
+  <div class="modal-backdrop" id="receiptModal">
+    <div class="modal receipt-modal-box">
+      <button class="modal-close no-print" id="closeReceiptModal">×</button>
+      <div class="receipt-slip" id="receiptSlipContent">
+        <div class="receipt-header">
+          <img class="receipt-logo" src="sharda-library-logo.jpg" alt="Sharda Library logo">
+          <div>
+            <h2 id="receiptLibName">Sharda Library</h2>
+            <p>Reading Room &amp; Study Sanctuary &bull; Official Fee Receipt</p>
+          </div>
+          <div class="receipt-no-badge">
+            <span id="receiptNumber">REC-20261106-001</span>
+          </div>
+        </div>
+        <hr class="receipt-divider">
+        <div class="receipt-grid">
+          <div class="receipt-col">
+            <span class="rc-label">Student Name:</span>
+            <strong id="receiptStudentName">—</strong>
+          </div>
+          <div class="receipt-col">
+            <span class="rc-label">Library Student ID:</span>
+            <strong id="receiptStudentId">—</strong>
+          </div>
+          <div class="receipt-col">
+            <span class="rc-label">Allotted Desk:</span>
+            <strong id="receiptSeatNumber">—</strong>
+          </div>
+          <div class="receipt-col">
+            <span class="rc-label">Target / Course:</span>
+            <strong id="receiptCourse">—</strong>
+          </div>
+          <div class="receipt-col">
+            <span class="rc-label">Mobile Number:</span>
+            <strong id="receiptPhone">—</strong>
+          </div>
+          <div class="receipt-col">
+            <span class="rc-label">Payment Date:</span>
+            <strong id="receiptPaymentDate">—</strong>
+          </div>
+        </div>
+        <div class="receipt-amount-card">
+          <div>
+            <span class="rc-label">Monthly Membership Fee</span>
+            <span class="receipt-status-pill">PAID &bull; VERIFIED</span>
+          </div>
+          <div class="receipt-price" id="receiptFeeAmount">₹800</div>
+        </div>
+        <div class="receipt-validity">
+          <span>Membership Valid Up To:</span>
+          <strong id="receiptValidDate">—</strong>
+        </div>
+        <div class="receipt-footer">
+          <div class="receipt-upi">
+            <span>Library UPI: <b id="receiptUpiDisplay">teenachoudhary186@ybl</b></span>
+            <small>Official fee payment confirmation</small>
+          </div>
+          <div class="receipt-signature">
+            <img class="receipt-signature-image" src="sharda-signature.png" alt="Authorized signature">
+            <span>Authorized Signature</span>
+          </div>
+        </div>
+      </div>
+      <div class="receipt-actions no-print">
+        <button class="btn-primary" id="printReceiptBtn">Print Receipt 🖨️</button>
+        <button class="btn-light" id="dismissReceiptBtn">Close</button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
