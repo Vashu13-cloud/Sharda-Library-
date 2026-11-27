@@ -1,0 +1,19 @@
+{
+  "name": "sharda-library-management",
+  "version": "3.0.0-rc.8.2",
+  "private": true,
+  "description": "Sharda Library reading room management system with Supabase persistence, protected admin APIs, backups, audit events and private student photos",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test:api": "node tests/schema-migration-check.js && node tests/api-smoke.js && node tests/production-guard.js && node tests/vercel-adapter.js",
+    "check:schema": "node scripts/check-supabase-schema.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "nodemailer": "^10.6.1",
+    "pg": "^8.23.1"
+  }
+}
